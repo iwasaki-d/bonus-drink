@@ -38,11 +38,57 @@ describe BonusDrink do
 
   context "異常系" do
 
-    it "マイナス本数" do
-      expect(BonusDrink.total_count_for(-1)).to eq -1
+    it "マイナス本数なら飲める数は0" do
+      expect(BonusDrink.total_count_for(-1)).to eq 0
     end
 
   end
 
+  describe "#exchange_bottles" do
+
+    context "正常系" do
+
+      it "0本" do
+        result = BonusDrink.exchange_bottles(0)
+        expect(result[:NEW_BOTTLE_KEY]).to eq 0
+        expect(result[:EMPTY_BOTTLE_KEY]).to eq 0
+      end
+
+      it "1本" do
+        result = BonusDrink.exchange_bottles(1)
+        expect(result[:NEW_BOTTLE_KEY]).to eq 0
+        expect(result[:EMPTY_BOTTLE_KEY]).to eq 1
+      end
+
+      it "2本" do
+        result = BonusDrink.exchange_bottles(2)
+        expect(result[:NEW_BOTTLE_KEY]).to eq 0
+        expect(result[:EMPTY_BOTTLE_KEY]).to eq 2
+      end
+
+      it "3本" do
+        result = BonusDrink.exchange_bottles(3)
+        expect(result[:NEW_BOTTLE_KEY]).to eq 1
+        expect(result[:EMPTY_BOTTLE_KEY]).to eq 0
+      end
+
+      it "4本" do
+        result = BonusDrink.exchange_bottles(4)
+        expect(result[:NEW_BOTTLE_KEY]).to eq 1
+        expect(result[:EMPTY_BOTTLE_KEY]).to eq 1
+      end
+
+    end
+
+    context "異常系" do
+
+      it "マイナス本数なら交換できず余りも出さない" do
+        result = BonusDrink.exchange_bottles(-1)
+        expect(result[:NEW_BOTTLE_KEY]).to eq 0
+        expect(result[:EMPTY_BOTTLE_KEY]).to eq 0
+      end
+
+    end
+  end
 
 end
